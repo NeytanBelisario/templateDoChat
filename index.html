@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>CHAT-API</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Glory:ital,wght@0,100..800;1,100..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Glory:ital,wght@0,100..800;1,100..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        * {
+            margin: 0;
+        }
+
+        #msgBig {
+            font-family: "Glory", sans-serif;
+            font-weight: 100;
+            font-style: normal;
+        }
+
+        #msgSmall {
+            color: #00FF0A;
+            font-family: "Poppins", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        #buttonWelcome {
+            outline: 1px #00FF0A solid;
+            width: 100%;
+            max-width: 300px;
+            cursor: pointer;
+        }
+
+        #modalNome {
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.508);
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            display: none;
+        }
+
+        #conteudoModal {
+            display: flex;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            outline: #00C008 solid 1px;
+            border-radius: 18px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            flex-direction: column;
+        }
+
+        #inputNome {
+            background-color: transparent;
+            border: none;
+            border-bottom: #ffffff31 solid 2px;
+            padding-bottom: 8px;
+            color: #ffffff31;
+            font-size: 3.5vw;
+            font-family: "Poppins", sans-serif;
+            font-weight: 800;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        #inputNome::placeholder {
+            color: #ffffff31;
+            text-align: center;
+        }
+
+        #inputNome:focus {
+            border: none;
+            outline: none !important;
+            border-bottom: #ffffff31 solid 2px;
+            text-align: center;
+        }
+
+        #botaoOk {
+            font-family: "Poppins", sans-serif;
+            font-weight: 800;
+            font-size: 5vw;
+            position: absolute;
+            bottom: 10%;
+        }
+
+        #botaoOk:hover{
+            cursor: pointer;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        @media (max-width: 828px) {
+            #msgBig h3 {
+                font-size: 40px;
+            }
+
+            #msgSmall p {
+                font-size: 16px;
+            }
+
+            #botaoOk {
+                font-size: 7vw;
+            }
+
+            #inputNome {
+                font-size: 8vw;
+            }
+
+            #img-background {
+                display: none;
+            }
+            .mx-5{
+                margin: 0!important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-black">
+    <div id="modalNome">
+        <div id="conteudoModal" class="h-75 position-absolute w-75 bg-black ">
+            <input type="text" placeholder="DIGITE SEU NOME..." id="inputNome">
+            <a id="botaoOk" onclick="entrar()" style="color: #00A507">OK</a>
+        </div>
+    </div>
+    <div id="container" style="z-index: 2;" class=" h-100 d-flex align-items-center mx-5">
+        <div class="row w-100 h-100 d-flex align-items-center mx-5">
+            <div class="col-md-5 col-sm-12 d-flex flex-column flex-wrap">
+                <div id="msgBig" class="ms-5">
+                    <h3 style="font-size: 60px;" class="text-white">Olá, seja bem vindo ao CHAT-API</h3>
+                </div>
+                <div id="msgSmall" class="ms-5">
+                    <p style="font-size: 20px;">Entre com seu nome para começar a conversar!</p>
+                </div>
+                <a id="buttonWelcome" class="d-flex justify-content-center p-2 ms-5 text-white" style="font-size: 20px;"
+                    onclick="modalON()">Começar</a>
+            </div>
+            <div id="img-background" class="col-md-4 col-sm-12 h-100">
+                <img class="h-100 position-absolute end-0 top-0" style="width: 25%;" src="./images/fundo.jpeg" alt="">
+            </div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+
+</html>

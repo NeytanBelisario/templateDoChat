@@ -38,6 +38,8 @@ function selecionarSala(id, nome) {
     }).then(function (response) {
         console.log(response)
         timestamp = response.timestamp
+        let salaEscolhida = document.getElementById('nomeSalaEscolhida')
+        salaEscolhida.innerText = nome
         listarMensagens();
     }).catch(error => {
         console.log(error)

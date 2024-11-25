@@ -38,6 +38,7 @@ function selecionarSala(id, nome) {
     }).then(function (response) {
         console.log(response)
         timestamp = response.timestamp
+        listarMensagens();
     }).catch(error => {
         console.log(error)
     })
@@ -77,10 +78,21 @@ function mandarMensagem() {
     console.log('oi')
     let inputMens = document.getElementById('inputMensagens')
     let contMensagem = inputMens.value
+
+    if (!contMensagem.trim()) {
+        return; // Não envia mensagens vazias
+    }
+    
     const data = {
         msg: contMensagem,
         idSala: salaId
     }
+
+    const novaMensagem = {
+        nick: nomeUsuario,
+        msg: contMensagem
+    };
+    adicionarMensagemNaInterface(novaMensagem);
     inputMens.value = ""
     fetch(`https://chat-crng.onrender.com/sala/mensagem?idsala=${salaId}`, {
         method: 'POST',
@@ -143,6 +155,45 @@ fetch('https://chat-crng.onrender.com/salas', {
         })
     }
 })
+
+function adicionarMensagemNaInterface(mensagem) {
+    const teste = document.createElement('div');
+    const mensagemDiv = document.createElement('div');
+    abaMensagens.appendChild(teste);
+    teste.appendChild(mensagemDiv);
+    teste.style.width = '100%';
+
+    const nick = document.createElement('div');
+    mensagemDiv.appendChild(nick);
+    nick.innerText = mensagem.nick;
+    nick.style.fontSize = '20px';
+    nick.style.borderBottom = 'solid 1px white';
+    nick.style.width = '90%';
+    nick.style.textAlign = 'left';
+
+    const conteudo = document.createElement('div');
+    mensagemDiv.appendChild(conteudo);
+    conteudo.innerText = mensagem.msg;
+    conteudo.style.paddingLeft = '15px';
+    conteudo.style.paddingRight = '15px';
+    mensagemDiv.style.backgroundColor = '#828482';
+    mensagemDiv.style.outline = 'solid 1px #00FF0A';
+    mensagemDiv.style.width = 'fit-content';
+    mensagemDiv.style.borderRadius = '10px';
+    mensagemDiv.style.display = 'flex';
+    mensagemDiv.style.flexWrap = 'wrap';
+    mensagemDiv.style.justifyContent = 'center';
+    mensagemDiv.style.marginTop = '15px';
+    teste.style.display = 'flex';
+    abaMensagens.style.display = 'flex';
+    abaMensagens.style.flexWrap = 'wrap';
+
+    if (mensagem.nick === nomeUsuario) {
+        teste.style.justifyContent = 'flex-end';
+    } else {
+        teste.style.justifyContent = 'flex-start';
+    }
+}
 
 
 function listarMensagens() {

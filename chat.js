@@ -17,6 +17,7 @@ let salaId;
 let timestamp;
 
 function selecionarSala(id, nome) {
+    abaMensagens.innerHTML = '';
     console.log(id)
     salaId = id
     let salaEscolhida = document.getElementById('nomeSalaEscolhida')
